@@ -41,7 +41,26 @@ handleIncreaseQuantity=(product)=>{
     })
 }
 
+handleDecreaseQunatity=(product)=>{
+    const{products}=this.state;
+    const index=products.indexOf(product);
+    if(products[index].qty===0){
+        return
+    }
+    products[index].qty-=1;
+    this.setState({
+        products
+    })
 
+}
+handleDeleteProduct=(id)=>{
+    const {products}=this.state;
+    const items=products.filter((item)=>item.id !== id);
+    this.setState({
+        products:items
+    })
+
+}
 
   render() {
     const { products } = this.state;
@@ -54,7 +73,9 @@ handleIncreaseQuantity=(product)=>{
               product={product}
               key={product.id}
               onIncreaseQty={this.handleIncreaseQuantity}
-              
+              onDecreaseQty={this.handleDecreaseQunatity}
+              handleDeleteProduct={this.handleDeleteProduct}
+
             />
           );
         })}
