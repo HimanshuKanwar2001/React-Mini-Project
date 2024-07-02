@@ -10,46 +10,67 @@ class CartItem extends React.Component {
       img: "",
     };
     // this.increaseQuantity=this.increaseQuantity.bind(this);
+    this.testing();
   }
-  
-   increaseQuantity=()=>{
+  testing() {
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("done");
+      }, 5000);
+    });
 
+    promise.then(() => {
+      //setState acts like synchronous call
+      this.setState((prevState)=>{return{qty:prevState.qty +10}});
+      this.setState((prevState)=>{return{qty:prevState.qty +10}});
+      this.setState((prevState)=>{return{qty:prevState.qty +10}});
+      
+      
+      
+      
+      console.log("state", this.state);
+    });
+  }
 
+  increaseQuantity = () => {
     //setState form 1
     // this.setState({
     //     qty: this.state.qty +1
     // })
 
     //setState form 2 -if prevState require use this
-    this.setState((prevState)=>{
-        return{
-            qty:prevState.qty+1 
-        }
-    },()=>{
-      console.log('this.state',this.state);
-    })
+    this.setState(
+      (prevState) => {
+        return {
+          qty: prevState.qty + 1,
+        };
+      },
+      () => {
+        console.log("this.state", this.state);
+      }
+    );
     // console.log('this.state',this.state);
-  }
+  };
 
-  decreaseQuantity=()=>{
-
-    if(this.state.qty<=0){
-      return
+  decreaseQuantity = () => {
+    if (this.state.qty <= 0) {
+      return;
     }
     //form 1
     // this.setState({
-        // qty:this.state.qty-1
+    // qty:this.state.qty-1
     // })
 
     // form 2
-    this.setState((prevState)=>{
-        return{
-            qty:prevState.qty-1
-        }
-    })
-  }
+    this.setState((prevState) => {
+      return {
+        qty: prevState.qty - 1,
+      };
+    });
+  };
 
   render() {
+    console.log("render");
     const { price, title, qty } = this.state;
     return (
       <div className="cart-item">
