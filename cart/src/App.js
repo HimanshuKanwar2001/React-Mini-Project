@@ -77,7 +77,7 @@ getCartTotal=()=>{
   const {products}=this.state;
   let cartTotal=0;
   products.map((product)=>{
-    cartTotal=cartTotal+(product.qty*product.price);
+    return cartTotal=cartTotal+(product.qty*product.price);
 
   })
   return cartTotal;
@@ -95,7 +95,7 @@ getCartTotal=()=>{
        onDecreaseQty={this.handleDecreaseQunatity}
        handleDeleteProduct={this.handleDeleteProduct}
        />
-       <div style={{fontSize:20, padding:10}}>TOTAL:{this.getCartTotal()}</div>
+       <div style={{fontSize:20, padding:10,}}>TOTAL:{this.getCartTotal()}</div>
       </div>
     );
 
