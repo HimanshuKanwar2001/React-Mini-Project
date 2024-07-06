@@ -3,38 +3,40 @@ import './App.css';
 
 import Cart from "./Cart";
 import Navbar from './Navbar';
+import firebase from 'firebase/compat/app';
 
 class  App extends React.Component {
   constructor() {
     super();
     this.state = {
-      products: [
-        {
-          price: 99,
-          title: "Watch",
-          qty: 1,
-          img: "https://images.unsplash.com/photo-1539874754764-5a96559165b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHdhdGNofGVufDB8fDB8fHww",
-          id: 1,
-        },
-        {
-          price: 500,
-          title: "Phone",
-          qty: 10,
-          img: "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          id: 2,
-        },
-        {
-          price: 999,
-          title: "Laptop",
-          qty: 4,
-          img: "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          id: 3,
-        },
-      ],
+      products: [],
+      loading:true
     };
     // this.increaseQuantity=this.increaseQuantity.bind(this);
   }
 
+  componentDidMount(){
+    firebase.firestore().collection('products').get().then((snapshot)=>{
+      console.log(snapshot);
+
+      snapshot.docs.map((doc)=>{
+        console.log(doc.data());
+      });
+
+      const products =snapshot.docs.map((doc)=>{
+        const data=doc.data();
+
+        data['id']=doc.id;
+        console.log(data);
+        return data;
+      });
+
+      this.setState({
+        products:products,
+        loading:false,
+      })
+    })
+  }
 handleIncreaseQuantity=(product)=>{
     const {products}=this.state;
     const index=products.indexOf(product);
@@ -85,7 +87,7 @@ getCartTotal=()=>{
 }
  
   render(){
-    const {products}=this.state
+    const {products,loading}=this.state
     return (
       <div className="App">
         <Navbar count ={this.getCartCount()}/>
@@ -95,6 +97,7 @@ getCartTotal=()=>{
        onDecreaseQty={this.handleDecreaseQunatity}
        handleDeleteProduct={this.handleDeleteProduct}
        />
+       {loading && <h1>Loading Products...</h1>}
        <div style={{fontSize:20, padding:10,}}>TOTAL:{this.getCartTotal()}</div>
       </div>
     );
