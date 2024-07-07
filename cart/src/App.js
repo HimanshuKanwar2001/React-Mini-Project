@@ -16,7 +16,29 @@ class  App extends React.Component {
   }
 
   componentDidMount(){
-    firebase.firestore().collection('products').get().then((snapshot)=>{
+    // firebase.firestore().collection('products').get().then((snapshot)=>{
+    //   console.log(snapshot);
+
+    //   snapshot.docs.map((doc)=>{
+    //     console.log(doc.data());
+    //   });
+
+    //   const products =snapshot.docs.map((doc)=>{
+    //     const data=doc.data();
+
+    //     data['id']=doc.id;
+    //     console.log(data);
+    //     return data;
+    //   });
+
+    //   this.setState({
+    //     products:products,
+    //     loading:false,
+    //   })
+    // })
+
+
+    firebase.firestore().collection('products').onSnapshot((snapshot)=>{
       console.log(snapshot);
 
       snapshot.docs.map((doc)=>{
@@ -36,6 +58,7 @@ class  App extends React.Component {
         loading:false,
       })
     })
+
   }
 handleIncreaseQuantity=(product)=>{
     const {products}=this.state;
