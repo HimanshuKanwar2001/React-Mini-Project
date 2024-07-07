@@ -1,9 +1,9 @@
 import React from "react";
 import './App.css';
 
+import firebase from 'firebase/compat/app';
 import Cart from "./Cart";
 import Navbar from './Navbar';
-import firebase from 'firebase/compat/app';
 
 class  App extends React.Component {
   constructor() {
@@ -13,6 +13,7 @@ class  App extends React.Component {
       loading:true
     };
     // this.increaseQuantity=this.increaseQuantity.bind(this);
+    this.db=firebase.firestore();
   }
 
   componentDidMount(){
@@ -38,7 +39,7 @@ class  App extends React.Component {
     // })
 
 
-    firebase.firestore().collection('products').onSnapshot((snapshot)=>{
+    this.db.collection('products').onSnapshot((snapshot)=>{
       console.log(snapshot);
 
       snapshot.docs.map((doc)=>{
@@ -108,12 +109,26 @@ getCartTotal=()=>{
   return cartTotal;
 
 }
+addProduct=()=>{
+  this.db.collection('products').add({
+    img:'',
+    price:900,
+    qty:3,
+    title:'washing machine'
+  }).then((docRef)=>{
+      console.log("Product has been added ",docRef)
+
+  }).catch((error)=>{
+    console.log("Error: ",error);
+  })
+}
  
   render(){
     const {products,loading}=this.state
     return (
       <div className="App">
         <Navbar count ={this.getCartCount()}/>
+        <button onClick={this.addProduct} style={{padding:20,fontSize:20}}>Add a product</button>
        <Cart 
        products={products}
        onIncreaseQty={this.handleIncreaseQuantity}
